@@ -1,0 +1,74 @@
+function  plot_act_time_loc_intervention_meanSub (pre_ratio_loc_time, post_ratio_loc_time)
+% act_ratio_loc_time (9, 2, 8, 12) = 0.0058;
+% act_ratio_loc_time: subject, task, location, time
+subjectNo = size (pre_ratio_loc_time,1);
+% for i_sub = 1: subjectNo
+for i_task=1:2
+
+    pre=squeeze(pre_ratio_loc_time(:,i_task,:,:));
+    mean_pre=squeeze(mean(pre,1));
+    post=squeeze(post_ratio_loc_time(:,i_task,:,:));
+    mean_post=squeeze(mean(post,1));
+    mean_pre = cat (1, mean_pre, mean_pre(end,:));
+    mean_post = cat (1, mean_post, mean_post(end,:));
+    figure (100)
+    hold on 
+
+    subplot(3,8,(i_task-1)*2+1); 
+%         disp (num2str((i_sub-1)*4+(i_task-1)*2+1))
+    surf(mean_pre)
+    view (0,90)
+    axis ([1 13 1 9])
+    set(gca,'YTickLabel',{'cS1','cM1','cPM','cSMA','iSMA','iPM','iM1','iS1'})
+    set(gca,'XTickLabel',-0.6:0.1:-0.1);
+
+    subplot(3,8,(i_task-1)*2+2); 
+    surf(mean_post)
+%         disp (num2str((i_sub-1)*4+(i_task-1)*2+2))
+    view (0,90)
+    axis ([1 13 1 9])
+    set(gca,'YTickLabel',{'cS1','cM1','cPM','cSMA','iSMA','iPM','iM1','iS1'})
+    set(gca,'XTickLabel',-0.6:0.1:-0.1);
+
+    figure (101)
+    hold on
+    
+    contral_all_sub = squeeze(pre_ratio_loc_time(:,i,1:4,:));
+    ipsi_all_sub = squeeze(pre_ratio_loc_time(:,i,5:8,:));   
+    Contral = squeeze (sum (contral_all_sub, 2));
+    Ipsi = squeeze (sum (ipsi_all_sub, 2));
+    LI = (Contral-Ipsi)./(Contral+Ipsi);
+
+    pre_mean_LI= squeeze (mean(LI,1));
+    pre_ste_LI = squeeze (std(LI)./sqrt(subjectNo-1));
+    subplot (3,4,i_task)
+    errorbar(pre_mean_LI,pre_ste_LI, 'b');  
+
+    
+    contral_all_sub = squeeze(post_ratio_loc_time(:,i_task,1:4,:));
+    ipsi_all_sub = squeeze(post_ratio_loc_time(:,i_task,5:8,:));   
+    Contral = squeeze (sum (contral_all_sub, 2));
+    Ipsi = squeeze (sum (ipsi_all_sub, 2));
+    LI = (Contral-Ipsi)./(Contral+Ipsi);
+
+    post_mean_LI= squeeze (mean(LI,1));
+    post_ste_LI = squeeze (std(LI)./sqrt(subjectNo-1));
+    subplot (3,4,i_task)
+    errorbar(post_mean_LI,post_ste_LI, 'g');  
+    
+
+
+    axis ([1 13 -0.7 0.7])
+    set(gca,'XTickLabel',-0.6:0.1:-0.1);
+    xlabel('Time (ms)');
+    ylabel ('Laterality Index');
+    if i_task ==1 
+        title ('SABD');
+    else
+        title ('EF');
+    end
+    grid on
+
+end
+% end
+

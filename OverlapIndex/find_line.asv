@@ -1,0 +1,7 @@
+function cur_line = find_line(first_point_ind, cur_area)
+
+
+x_distance = abs(cur_area-repmat(cur_area(first_point_ind,:),size(cur_area,1),1));
+x_distance = x_distance (:,1
+line_ind = find (x_distance< 3.8);
+cur_line = cur_area (line_ind,:,:);

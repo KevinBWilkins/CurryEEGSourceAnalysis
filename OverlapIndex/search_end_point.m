@@ -1,0 +1,8 @@
+function end_point = search_end_point (mid_point1, step, cur_area)
+
+end_mid_point = [mid_point1(1)+step, mid_point1(2), mid_point1(3)];
+all_dis = norm(cur_area-repmat(end_mid_point,size(cur_area,1),1)); 
+[tmp, end_point_ind] = min (all_dis);
+end_point = cur_area(end_point_ind,:);
+cur_line = find_line(end_point, cur_area);
+end_point = [mean(cur_line(:,1)),mean(cur_line(:,2)),mean(cur_line(:,2))];

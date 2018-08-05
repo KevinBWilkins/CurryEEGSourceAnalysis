@@ -1,0 +1,54 @@
+function LI_all = plot_act_time_loc_intervention (pre_ratio_loc_time, post_ratio_loc_time)
+% act_ratio_loc_time (9, 2, 8, 12) = 0.0058;
+% act_ratio_loc_time: subject, task, location, time
+figure (100)
+hold on 
+subjectNo = size (act_ratio_loc_time,1);
+for i_sub = 1: subjectNo
+    for i_task=1:2
+        
+        pre=squeeze(pre_ratio_loc_time(i_sub,i_task,:,:));
+        post=squeeze(pre_ratio_loc_time(i_sub,i_task,:,:));
+        
+        subplot(8,3,(i_task-1)*i_sub+1); 
+        surf(pre)
+        view (0,90)
+        axis ([1 13 1 9])
+        set(gca,'YTickLabel',{'cS1','cM1','cPM','cSMA','iSMA','iPM','iM1','iS1'})
+        set(gca,'XTickLabel',-0.6:0.1:-0.1);
+
+        subplot(8,3,(i_task-1)*i_sub+2); 
+        surf(post)
+        view (0,90)
+        axis ([1 13 1 9])
+        set(gca,'YTickLabel',{'cS1','cM1','cPM','cSMA','iSMA','iPM','iM1','iS1'})
+        set(gca,'XTickLabel',-0.6:0.1:-0.1);
+
+        figure (101)
+        hold on
+        contral_pre_sub = sum(pre(1:4,:), 2);
+        ipsi_post_sub = sum(pre(5:8,:), 2);   
+        contral_pre_sub = sum(post(1:4,:), 2);
+        ipsi_post_sub = sum(post(5:8,:), 2);   
+        
+        
+        LI_pre = (contral_pre_sub-ipsi_pre_sub)./(contral_pre_sub+ipsi_pre_sub);
+        LI_post = (contral_post_sub-ipsi_post_sub)./(contral_post_sub+ipsi_post_sub);
+       
+        subplot (4,3,(i_task-1)*i_sub+1)
+        plot([LI_pre;]);  
+
+        axis ([1 13 -0.3 0.3])
+        set(gca,'XTickLabel',-0.6:0.1:-0.1);
+        xlabel('Time (ms)');
+        ylabel ('Laterality Index');
+        if i ==1 
+            title ('SABD');
+        else
+            title ('EF');
+        end
+        grid on
+
+    end
+end
+

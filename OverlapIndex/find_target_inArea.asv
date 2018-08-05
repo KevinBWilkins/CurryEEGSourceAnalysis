@@ -1,0 +1,38 @@
+% function [targetL,targetC,edge,cortexL]=find_act_M1(subjectName,inv_file,edge_file,TimePoints)
+function [targetL]=find_target_inArea(inv_file_name,seed,radius,plotCort)
+
+[cortexL,Lcount,LNR]=read_Curry_file3(inv_file_name,'LOCATION',0,0);
+
+%--------Select the points within the area---------------
+[m,tmp]=size(cortexL);
+    dis=sqrt( sum( (cortexL-repmat(seed,size(cortexL,1),1)).^2,2 )  );
+    Tind=find(dis<radius);
+    remain=[];
+%     if i>1
+%         for j=1:length(index)
+%             if isempty(find(Tind==index(j)))
+%                 remain=[remain,index(j)];
+%             end
+%         end
+%     else
+%         remain=index';
+%     end
+% %     KpInd=find(dis>=5);
+% 
+% %     for j=1:length(index)
+%     Tind=[Tind,remain];
+% %     tmp=cur_L(KpInd,:);
+% %     clear cur_L
+% %     cur_L=tmp;
+% %     clear tmp
+% % end
+
+targetL=cortexL(Tind,:);
+% targetC=contrib(Tind,:);
+% edge=edge(2:end,:);
+if plotCort
+	figure (1)
+	plot3(cortexL(:,1),cortexL(:,2),cortexL(:,3),'b.');
+	hold on
+	plot3(targetL(:,1),targetL(:,2),targetL(:,3),'m+');
+end

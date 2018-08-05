@@ -1,0 +1,33 @@
+function [TorqCp_avg,TorqCp_max,TorqCp_rise,TorqCp_rise1,TorqCp_rise2,TorqCp_open, TorqCp_hold]=MSI_sub(subName)
+
+filename={'abd';'ef'};
+% filename={'r-abd';'r-ef'};
+
+
+
+figureNo=[1;2];
+for i=1:length(subName)
+    subjectname=subName{i}
+%     filedir=['F:\Data\torque\',subjectname,'\abdef\'];
+    filedir=['F:\Data\torque\',subjectname,'\'];
+%     filedir=['H:\Torque\',subjectname,'\'];
+%     filedir=['H:\Torque\RLpost\06-Feb-2006\RL\'];
+% 
+    for j=1:length(filename)
+        figure (figureNo(j))
+        hold on
+        FileName=[filedir,'MSI_',filename{j},'.dat'];
+        focus_factor=load (FileName);
+        MSI=mean(focus_factor,2);
+        plot(MSI,'r')
+        text(500,MSI(end),subjectname);
+        MSI_avg(i,j)=mean(MSI(1:end-1));
+        MSI_max(i,j)=max(MSI(1:end-1));
+        MSI_rise(i,j)=mean(MSI(1:100));
+        MSI_rise1(i,j)=mean(MSI(1:50));
+        MSI_rise2(i,j)=mean(MSI(50:100));
+        MSI_open(i,j)=mean(MSI(20:75));
+        MSI_hold(i,j)=mean(MSI(end-100:end-1));
+    end
+    [MSI_avg,MSI_max,MSI_rise,MSI_rise1,MSI_rise2,MSI_open, MSI_hold]
+end
